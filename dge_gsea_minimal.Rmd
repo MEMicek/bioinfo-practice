@@ -1,0 +1,29 @@
+---
+title: "DGE and GSEA example protocol"
+author: "Marta Micek"
+date: "2025-12-06"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intro
+
+A minimal protocol for DGE and GSEA analysis using raw counts as input.
+Test data for this project was obtained from: https://jhubiostatistics.shinyapps.io/recount3-study-explorer/
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
