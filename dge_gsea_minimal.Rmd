@@ -14,6 +14,7 @@ library(dplyr)
 library(airway)
 library(GenomeInfoDb)
 library(DESeq2)
+library(ggplot2)
 ```
 
 # Intro
@@ -47,5 +48,55 @@ dds <- DESeq(dds)
 res <- results(dds, contrast = c("dex", "trt", "untrt"))
 resOrdered <- res[order(res$pvalue), ]
 head(resOrdered)
+```
+
+# Volcano
+
+**pmax()** works element-wise. For each adjusted p-value, it returns:
+
+• the p-value itself, if it’s > 2e-308
+• otherwise, 2e-308 instead
+
+
+**.Machine$double.xmin**
+
+This is a built-in R constant. It’s the smallest positive floating-point number R can represent.
+
+The whole expression:
+
+pmax(res$padj, .Machine$double.xmin)
+pmax() works element-wise. For each adjusted p-value, it returns:
+
+• the p-value itself, if it’s > 2e-308
+• otherwise, 2e-308 instead
+
+pmax checks which number is larger in each pair, so:
+
+So per gene:
+
+if padj is normal → keep it
+
+if padj is 0 → replace it with 2e-308
+
+if padj is negative (shouldn’t happen) → also replaced
+
+if padj is NA → stays NA
+
+
+```{r volcano}
+plot(
+  res$log2FoldChange,
+  -log10(pmax(res$padj, .Machine$double.xmin)), 
+  pch = 20,
+  main = "Volcano plot",
+  xlab = "log2(Fold Change)",
+  ylab = "-log10(adjusted p-value)"
+)
+```
+
+```{r}
+ggplot(as.data.frame(res),
+       aes(log2FoldChange, -log10(padj))) +
+  geom_point()
 ```
 
